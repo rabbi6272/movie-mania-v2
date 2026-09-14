@@ -20,30 +20,19 @@ export default function HomePage() {
   const [mediaTypeFilter, setMediaTypeFilter] = useState<("movie" | "tv")[]>([]);
   const router = useRouter();
   const { userID } = useAuth();
-
-  if (!userID) {
-    return (
-      <>
-        <GuestHeroSection router={router} />
-        <TrendingRow />
-      </>
-    )
-  }
-
-  const toggleMediaType = (type: "movie" | "tv") => {
-    setMediaTypeFilter((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
-  };
-
   const setSavedMovies = useMovieStore((state) => state.setSavedMovies);
-
   const { data: savedMovies = [], isLoading: moviesLoading } = useQuery({
     queryKey: ["movies", userID],
     queryFn: () => getAllMovies(userID),
     enabled: !!userID,
     staleTime: 2 * 60 * 1000,
   });
+
+  const toggleMediaType = (type: "movie" | "tv") => {
+    setMediaTypeFilter((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
 
   const filteredMovies = useMemo(() => {
     let result = savedMovies;
@@ -75,6 +64,15 @@ export default function HomePage() {
         <Loader />
       </div>
     );
+  }
+
+  if (!userID) {
+    return (
+      <>
+        <GuestHeroSection router={router} />
+        <TrendingRow />
+      </>
+    )
   }
 
   const watchedCount = savedMovies?.filter((movie) => movie.watched === true).length || 0;
