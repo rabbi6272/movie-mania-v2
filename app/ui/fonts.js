@@ -1,14 +1,13 @@
 import localFont from "next/font/local";
-import { Nunito } from "next/font/google";
 
-export const nunito = Nunito({
+export const nunito = localFont({
+  src: "../../public/fonts/Nunito.ttf",
   subsets: ["latin"],
-  weight: ["400", "700"],
   display: "swap",
 });
 
 export const ttTrailer = localFont({
-  src: "./tttrailer.ttf",
+  src: "../../public/fonts/tttrailer.ttf",
   display: "swap",
   style: "italic",
   weight: "800",
