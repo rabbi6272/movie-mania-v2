@@ -33,7 +33,7 @@ export function TrendingRow() {
   return (
     <div className="w-full mx-auto px-2 md:px-4 mt-4 lg:mt-6">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-gray-900 font-nunito font-extrabold text-lg md:text-xl flex items-center gap-2">
+        <h2 className="text-gray-900 font-nunito font-bold text-lg md:text-xl flex items-center gap-2">
           <span className="material-symbols-outlined text-gray-500">local_fire_department</span>
           Trending Now
         </h2>
@@ -56,9 +56,9 @@ export function TrendingRow() {
           {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="flex-shrink-0 w-[140px] md:w-[155px] rounded-md overflow-hidden border border-gray-200 bg-white shadow-md animate-pulse"
+              className="shrink-0 w-38.75 rounded-md overflow-hidden border border-gray-200 bg-white shadow-md animate-pulse"
             >
-              <div className="w-full aspect-[3/4] bg-gray-200" />
+              <div className="w-full aspect-3/4 bg-gray-200" />
               <div className="p-2 space-y-1.5">
                 <div className="h-3 bg-gray-200 rounded w-3/4" />
                 <div className="h-2.5 bg-gray-200 rounded w-1/2" />
@@ -69,7 +69,7 @@ export function TrendingRow() {
       ) : (
         <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
           {trending.map((movie, index) => (
-            <div key={movie.tmdbId} className="flex-shrink-0 w-[140px] md:w-[155px]">
+            <div key={movie.tmdbId} className="shrink-0 w-38.75">
               <SmallMovieCard movie={movie} index={index} />
             </div>
           ))}

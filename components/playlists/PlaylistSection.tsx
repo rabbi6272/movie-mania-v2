@@ -12,7 +12,7 @@ import { Button } from "../ui/Button";
 function PlaylistSkeleton() {
   return (
     <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-md animate-pulse">
-      <div className="w-full aspect-[16/10] bg-gray-200" />
+      <div className="w-full aspect-16/10 bg-gray-200" />
       <div className="p-3 space-y-2">
         <div className="h-3 bg-gray-200 rounded w-3/4" />
         <div className="h-2.5 bg-gray-200 rounded w-1/2" />
@@ -54,7 +54,7 @@ export function PlaylistSection({ userID }: { userID: string | null }) {
   return (
     <section className="w-full mt-1 px-2 md:px-4">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-gray-900 font-nunito font-extrabold text-lg md:text-xl flex items-center gap-2">
+        <h2 className="text-gray-900 font-nunito font-bold text-lg md:text-xl flex items-center gap-2">
           <span className="material-symbols-outlined text-gray-500">video_library</span>
           My Playlists
         </h2>

@@ -11,7 +11,7 @@ export const SmallMovieCard = memo(function SmallMovieCard({
   index,
 }: { movie: Movie; index: number }) {
   const posterURL = getPosterURL(movie.poster_path, "w342");
-  const year = (movie.release_date || movie.first_air_date)?.substring(0, 4) || "N/A";
+  const year = movie.release_date?.substring(0, 4) || "N/A";
   const mediaType = movie.media_type || "movie";
   const detailPath = mediaType === "tv" ? `/tv/${movie.tmdbId || movie.id}` : `/movie/${movie.tmdbId || movie.id}`;
 
@@ -21,7 +21,7 @@ export const SmallMovieCard = memo(function SmallMovieCard({
       className="h-auto w-full mx-auto rounded-md lg:rounded-lg border border-gray-200 flex flex-col cursor-pointer bg-white transition-colors duration-300 shadow-md hover:shadow-lg overflow-hidden group animate-fadeIn"
       style={{ animationDelay: `${index * 15}ms` }}
     >
-      <div className="relative w-full aspect-[3/4] overflow-hidden">
+      <div className="relative w-full aspect-3/4 overflow-hidden">
         {posterURL ? (
           <Image
             fill

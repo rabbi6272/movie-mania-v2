@@ -10,7 +10,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { addMovie, updateMovie, deleteMovie } from "@/hooks/useMoviesServices";
 import { useMovieStore } from "@/store/store";
 import { useAuth } from "@/hooks/useAuth";
-import { getMovieDetails, getTVDetails, getPosterURL, getBackdropURL, normalizeMovieForCard } from "@/api/tmdb";
+import { getMovieDetails, getTVDetails, getPosterURL, getBackdropURL, normalizeMovieForCard, normalizeMovieForMinimal } from "@/api/tmdb";
 import TrailerModal from "./TrailerModal";
 import SimilarMovies from "./SimilarMovies";
 import { AddToPlaylistModal } from "./playlists/AddToPlaylistModal";
@@ -22,8 +22,8 @@ function DetailSkeleton() {
       <div className="relative w-full h-[40vh] md:h-[50vh] bg-gray-200 animate-pulse" />
       <div className="w-full max-w-6xl mx-auto px-4 md:px-8 -mt-24 relative z-10">
         <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-          <div className="w-48 md:w-64 lg:w-72 flex-shrink-0 mx-auto md:mx-0">
-            <div className="aspect-[2/3] bg-gray-200 rounded-xl animate-pulse" />
+          <div className="w-48 md:w-64 lg:w-72 shrink-0 mx-auto md:mx-0">
+            <div className="aspect-2/3 bg-gray-200 rounded-xl animate-pulse" />
           </div>
           <div className="flex-1 pt-4 md:pt-16 space-y-4">
             <div className="h-8 bg-gray-200 rounded animate-pulse w-3/4" />
@@ -65,7 +65,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
   );
   const cachedMovie = movieDetailsCache[cacheKey];
 
-  const shouldFetch = !!contentId && !savedMovie && !cachedMovie;
+  const shouldFetch = !!contentId && !cachedMovie;
 
   const { data: fetchedContent, isLoading: loading } = useQuery({
     queryKey: [mediaType, contentId],
@@ -81,7 +81,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
     }
   }, [fetchedContent, contentId, cacheKey, setMovieDetails]);
 
-  const content = savedMovie || cachedMovie || fetchedContent || {};
+  const content = cachedMovie || fetchedContent || {};
   const posterURL = getPosterURL(content.poster_path, "w500");
   const backdropURL = getBackdropURL(content.backdrop_path, "w1280");
   const title = content.title || content.name || "N/A";
@@ -106,14 +106,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
   const isWatched = savedMovie && savedMovie.watched === true;
 
   const playlistItem = {
-    tmdbId: Number(content.id ?? content.tmdbId),
-    media_type: mediaType,
-    title,
-    poster_path: content.poster_path || null,
-    backdrop_path: content.backdrop_path || null,
-    overview: content.overview ?? null,
-    vote_average: content.vote_average ?? null,
-    release_date: content.release_date || content.first_air_date || null,
+    ...normalizeMovieForMinimal(content),
   };
 
   function handleOpenPlaylistModal() {
@@ -153,14 +146,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
         }
       } else {
         const movieData = {
-          tmdbId: content.id,
-          media_type: mediaType,
-          title,
-          poster_path: content.poster_path,
-          backdrop_path: content.backdrop_path,
-          overview: content.overview,
-          vote_average: content.vote_average,
-          release_date: releaseDate,
+          ...normalizeMovieForMinimal(content),
           watched: false,
         };
         const { success, message } = await addMovie(movieData, userID);
@@ -207,14 +193,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
         }
       } else {
         const movieData = {
-          tmdbId: content.id,
-          media_type: mediaType,
-          title,
-          poster_path: content.poster_path,
-          backdrop_path: content.backdrop_path,
-          overview: content.overview,
-          vote_average: content.vote_average,
-          release_date: releaseDate,
+          ...normalizeMovieForMinimal(content),
           watched: true,
         };
         const { success, message } = await addMovie(movieData, userID);
@@ -277,10 +256,10 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
             priority
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900" />
+          <div className="w-full h-full bg-linear-to-br from-gray-800 to-gray-900" />
         )}
         {/* Gradient overlays */}
-        <div className="absolute bottom-0 h-[20%] md:h-[30%] w-full bg-gradient-to-t from-white/40 to-transparent" />
+        <div className="absolute bottom-0 h-[20%] md:h-[30%] w-full bg-linear-to-t from-white/40 to-transparent" />
         {/* <div className="absolute inset-0 blur-sm" /> */}
 
         {/* Top bar */}
@@ -311,14 +290,14 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
       <div className="w-full max-w-6xl mx-auto px-4 md:px-8 -mt-28 md:-mt-32 relative z-10 pb-12">
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-10">
           {/* Poster */}
-          <div className="w-54 md:w-60 lg:w-68 flex-shrink-0 mx-auto md:mx-0">
-            <div className="relative aspect-[2/3] rounded-xl overflow-hidden shadow-xl ring-1 ring-black/10">
+          <div className="w-54 md:w-60 lg:w-68 shrink-0 mx-auto md:mx-0">
+            <div className="relative md:sticky md:top-0 aspect-2/3 rounded-xl overflow-hidden shadow-xl ring-1 ring-black/10">
               {posterURL ? (
                 <Image
                   fill
                   src={posterURL}
                   alt={title}
-                  className="object-cover"
+                  className="object-cover "
                   sizes="(max-width: 768px) 176px, (max-width: 1024px) 224px, 256px"
                   priority
                 />
@@ -334,7 +313,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
           <div className=" flex-1 pt-2 sm:pt-8 md:pt-16 ">
             {/* Title + badge */}
             <div className="relative">
-              <h1 className="text-center md:text-left text-3xl md:text-4xl lg:text-5xl text-black font-nunito font-extrabold leading-tight">
+              <h1 className="text-center md:text-left text-3xl md:text-4xl lg:text-5xl text-black font-nunito font-bold leading-tight">
                 {title}
               </h1>
               {mediaType === "tv" && (

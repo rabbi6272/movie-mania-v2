@@ -153,6 +153,15 @@ export const normalizeMovieForCard = (item) => ({
   genre_ids: item.genre_ids || item.genres?.map((g) => g.id) || [],
 });
 
+export const normalizeMovieForMinimal = (item) => ({
+  tmdbId: item.id,
+  media_type: item.media_type || "movie",
+  title: item.title || item.name,
+  poster_path: item.poster_path || null,
+  release_date: item.release_date || item.first_air_date || null,
+  vote_average: item.vote_average ?? null,
+});
+
 export const normalizeMovieForFirestore = (movie) => ({
   tmdbId: movie.id,
   media_type: movie.media_type || "movie",

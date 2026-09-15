@@ -5,7 +5,7 @@ export function EmptyLibrary({ router }: { router: ReturnType<typeof useRouter> 
 	return (
 		<div className="w-full py-14 px-4 flex flex-col items-center justify-center text-center">
 			<span className="material-symbols-outlined text-5xl text-gray-300">bookmark_add</span>
-			<h2 className="text-xl md:text-2xl font-semibold text-gray-600 mt-3">
+			<h2 className="text-xl md:text-2xl font-bold text-gray-600 mt-3">
 				Your watchlist is empty
 			</h2>
 			<p className="text-sm text-gray-400 mt-1 max-w-xs">
