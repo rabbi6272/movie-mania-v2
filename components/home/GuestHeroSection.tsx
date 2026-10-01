@@ -1,7 +1,6 @@
-import { useRouter } from "next/navigation";
 import { Button } from "../ui/Button";
 
-export function GuestHeroSection({ router }: { router: ReturnType<typeof useRouter> }) {
+export function GuestHeroSection() {
 	return (
 		<section className="w-full py-10 md:py-16 px-4 text-center">
 			<div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-gray-100 mb-4">
@@ -15,7 +14,7 @@ export function GuestHeroSection({ router }: { router: ReturnType<typeof useRout
 			</p>
 			<div className="flex items-center justify-center gap-3 mt-6">
 				<Button
-					onClick={() => router.push('/search')}
+					href="/search"
 					varient="primary"
 					size="md"
 					icon="search"
@@ -23,7 +22,7 @@ export function GuestHeroSection({ router }: { router: ReturnType<typeof useRout
 					Browse movies
 				</Button>
 				<Button
-					onClick={() => router.push('/signup')}
+					href="/signup"
 					varient="primary"
 					size="md"
 					icon="person_add"

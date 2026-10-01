@@ -6,7 +6,7 @@ const getAuthHeaders = () => ({
   "Content-Type": "application/json",
 });
 
-const fetchFromTMDB = async (endpoint, params = {}, signal) => {
+const fetchFromTMDB = async (endpoint, params = {}, signal, fetchOptions = {}) => {
   const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {
@@ -17,6 +17,7 @@ const fetchFromTMDB = async (endpoint, params = {}, signal) => {
   const res = await fetch(url.toString(), {
     headers: getAuthHeaders(),
     signal,
+    ...fetchOptions,
   });
   if (!res.ok) {
     throw new Error(`TMDB API error: ${res.status} ${res.statusText}`);
@@ -73,8 +74,8 @@ export const getTVDetails = async (id) => {
   });
 };
 
-export const getTrendingAll = async (timeWindow = "week", page = 1) => {
-  return fetchFromTMDB(`/trending/all/${timeWindow}`, { page });
+export const getTrendingAll = async (timeWindow = "week", page = 1, fetchOptions) => {
+  return fetchFromTMDB(`/trending/all/${timeWindow}`, { page }, undefined, fetchOptions);
 };
 
 export const getTrendingMovies = async (timeWindow = "week", page = 1) => {
