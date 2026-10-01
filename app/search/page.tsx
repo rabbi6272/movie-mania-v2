@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { SmallMovieCard } from "@/components/SmallMovieCard";
 import { Loader } from "@/components/ui/loader";
 import Pagination from "@/components/Pagination";
 import { useSearchMovies } from "@/hooks/useSearchMovies";
 import { Button } from "@/components/ui/Button";
+import { Search } from "@/components/ui/Search";
 
 const MEDIA_FILTERS = [
   { value: "all", label: "All" },
@@ -37,13 +38,6 @@ export default function SearchPage() {
   } = useSearchMovies();
 
   const [mediaFilter, setMediaFilter] = useState("all");
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(min-width: 768px)").matches) {
-      inputRef.current?.focus();
-    }
-  }, []);
 
   const filteredMovies = useMemo(() => {
     if (mediaFilter === "all") return searchedMovies;
@@ -66,32 +60,10 @@ export default function SearchPage() {
       <div className="w-full px-4 md:px-10 lg:px-15 xl:px-20 py-4">
         <form
           onSubmit={(e) => e.preventDefault()}
-          className="relative w-full max-w-2xl mx-auto"
+          className="flex justify-center"
           role="search"
         >
-          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-            search
-          </span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search for movies or TV shows..."
-            aria-label="Search for movies or TV shows"
-            autoComplete="off"
-            className="w-full h-12 rounded-full border border-gray-400 focus:outline-none focus:border-blue-400 focus:ring focus:ring-blue-400/20 px-11 xl:px-14 text-gray-700 placeholder:text-gray-400"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery("")}
-              aria-label="Clear search"
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 grid place-items-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-lg">close</span>
-            </button>
-          )}
+          <Search value={searchQuery} onChange={setSearchQuery} autoFocus />
         </form>
 
         {/* Media type toggle */}
@@ -214,9 +186,8 @@ export default function SearchPage() {
       {/* Blank query state */}
       {!searchQuery.trim() && (
         <div className="w-full flex flex-col items-center justify-center py-16 px-4 text-center">
-          <span className="material-symbols-outlined text-gray-300 text-6xl mb-4">search</span>
-          <h1 className="text-2xl font-semibold text-gray-600">Search for movies</h1>
-          <p className="text-sm text-gray-500 mt-1 max-w-full">
+          <h1 className="text-2xl xl:text-3xl font-semibold text-gray-700">Search for movies</h1>
+          <p className="text-sm xl:text-base text-gray-500 mt-1 max-w-full">
             Find your favorite movies and TV shows from millions of titles.
           </p>
         </div>
