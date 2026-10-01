@@ -9,6 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/utils/firebaseConfig";
+import { getSiteUrl } from "@/lib/seo";
 
 import type { Playlist, PlaylistItem, ShareLink } from "@/types/playlist";
 
@@ -31,9 +32,7 @@ function generateToken() {
 
 export const shareUrl = (token: string) => {
   const base =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    typeof window !== "undefined" ? window.location.origin : getSiteUrl();
   return `${base}/share/${token}`;
 };
 

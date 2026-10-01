@@ -9,11 +9,12 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg'
   icon?: React.ReactNode
   loading?: boolean
+  ariaLabel?: string
 }
 
-export function Button({ onClick, href, className, children, varient = 'primary', size = 'md', icon, loading = false }: ButtonProps) {
+export function Button({ onClick, href, className, children, varient = 'primary', size = 'md', icon, loading = false, ariaLabel }: ButtonProps) {
   const classes = `flex items-center justify-center rounded-full cursor-pointer shadow text-nowrap whitespace-nowrap font-semibold disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200
-    ${size === 'sm' ? 'text-xs px-3 py-2' : size === 'lg' ? 'text-base px-6 py-3' : 'text-sm px-4 py-2.5'}
+    ${size === 'sm' ? 'text-xs font-medium px-3 py-2' : size === 'lg' ? 'text-base px-6 py-3' : 'text-sm px-4 py-2.5'}
     ${varient === 'primary' ? 'bg-black text-white' : 'bg-transparent border border-gray-300 text-gray-900 hover:bg-gray-100'} ${className}`
 
   const content = loading ? (
@@ -26,7 +27,7 @@ export function Button({ onClick, href, className, children, varient = 'primary'
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} aria-label={ariaLabel}>
         {content}
       </Link>
     )
@@ -37,6 +38,7 @@ export function Button({ onClick, href, className, children, varient = 'primary'
       onClick={onClick}
       disabled={loading}
       className={classes}
+      aria-label={ariaLabel}
     >
       {content}
     </button>

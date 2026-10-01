@@ -1,63 +1,96 @@
 import "./globals.css";
 
+import type { Metadata, Viewport } from "next";
 import { Toaster } from "react-hot-toast";
 import Link from "next/link";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 
 import Navbar from "@/components/navbar";
 import Providers from "@/components/Providers";
-
+import { JsonLd } from "@/components/seo/JsonLd";
 import { nunito } from "./ui/fonts";
+import {
+  DEFAULT_OG_IMAGE,
+  DEFAULT_TITLE_TEMPLATE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  TWITTER_HANDLE,
+  absoluteUrl,
+} from "@/lib/seo";
 
-export const metadata = {
-  title: "MovieMania || Solution for all your movie needs",
-  description: "All your favorite movies in one place",
+export const metadata: Metadata = {
+  metadataBase: new URL(absoluteUrl("/")),
+  title: {
+    default: SITE_TITLE,
+    template: DEFAULT_TITLE_TEMPLATE,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "movies",
+    "tv shows",
+    "streaming",
+    "watchlist",
+    "film",
+    "cinema",
+    "search movies",
+    "movie ratings",
+    "trailers",
+    "playlists",
+  ],
+  authors: [{ name: "MovieMania" }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "entertainment",
+  openGraph: {
+    type: "website",
+    url: absoluteUrl("/"),
+    siteName: SITE_NAME,
+    locale: "en_US",
+    images: [DEFAULT_OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: TWITTER_HANDLE,
+    images: [DEFAULT_OG_IMAGE.url],
+  },
 };
 
-export default function RootLayout({ children }) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: absoluteUrl("/"),
+  description: SITE_DESCRIPTION,
+  inLanguage: "en",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${absoluteUrl("/search")}?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: absoluteUrl("/"),
+  logo: absoluteUrl("/icon.png"),
+  sameAs: ["https://github.com/rabbi6272"],
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="description"
-          content="All your favorite movies in one place"
-        />
-        <meta
-          name="keywords"
-          content="movies, streaming, watch, films, cinema, online"
-        />
-        <meta name="author" content="MovieMania" />
-        <title>MovieMania || Solution for all your movie needs</title>
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://movimania.example.com/" />
-        <meta
-          property="og:title"
-          content="MovieMania || Solution for all your movie needs"
-        />
-        <meta
-          property="og:description"
-          content="All your favorite movies in one place"
-        />
-        <meta property="og:image" content="/icon.png" />
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MovieMania || Solution for all your movie needs" />
-        <meta name="twitter:description" content="All your favorite movies in one place" />
-        <meta name="twitter:url" content="https://movieshub.example.com/" />
-        <meta
-          name="twitter:title"
-          content="MovieMania || Solution for all your movie needs"
-        />
-        <meta
-          name="twitter:description"
-          content="All your favorite movies in one place"
-        />
-        <meta name="twitter:image" content="/icon.png" />
-        <link rel="icon" href="/icon.png" />
-
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
@@ -66,6 +99,8 @@ export default function RootLayout({ children }) {
       <body
         className={`${nunito.className} antialiased bg-gray-50 text-gray-700`}
       >
+        <JsonLd data={websiteJsonLd} />
+        <JsonLd data={organizationJsonLd} />
         <Providers>
           <Toaster
             position="top-center"

@@ -1,46 +1,67 @@
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p";
 
+export type TmdbParams = Record<string, string | number | undefined | null>;
+
+export type TmdbFetchOptions = RequestInit & {
+  next?: { revalidate?: number | false; tags?: string[] };
+};
+
+/** Carries the HTTP status so callers can distinguish a TMDB 404 from a outage. */
+export class TmdbError extends Error {
+  status?: number;
+
+  constructor(status: number, statusText: string) {
+    super(`TMDB API error: ${status} ${statusText}`);
+    this.status = status;
+  }
+}
+
 const getAuthHeaders = () => ({
   Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN}`,
   "Content-Type": "application/json",
 });
 
-const fetchFromTMDB = async (endpoint, params = {}, signal, fetchOptions = {}) => {
+const fetchFromTMDB = async (
+  endpoint: string,
+  params: TmdbParams = {},
+  signal?: AbortSignal | null,
+  fetchOptions: TmdbFetchOptions = {},
+): Promise<any> => {
   const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {
-      url.searchParams.append(key, value);
+      url.searchParams.append(key, String(value));
     }
   });
 
   const res = await fetch(url.toString(), {
     headers: getAuthHeaders(),
-    signal,
+    signal: signal ?? undefined,
     ...fetchOptions,
   });
   if (!res.ok) {
-    throw new Error(`TMDB API error: ${res.status} ${res.statusText}`);
+    throw new TmdbError(res.status, res.statusText);
   }
   return res.json();
 };
 
-export const getPosterURL = (path, size = "w500") => {
+export const getPosterURL = (path: string | null | undefined, size = "w500") => {
   if (!path) return null;
   return `${TMDB_IMAGE_BASE}/${size}${path}`;
 };
 
-export const getBackdropURL = (path, size = "w1280") => {
+export const getBackdropURL = (path: string | null | undefined, size = "w1280") => {
   if (!path) return null;
   return `${TMDB_IMAGE_BASE}/${size}${path}`;
 };
 
-export const getProfileURL = (path, size = "w185") => {
+export const getProfileURL = (path: string | null | undefined, size = "w185") => {
   if (!path) return null;
   return `${TMDB_IMAGE_BASE}/${size}${path}`;
 };
 
-export const searchMovies = async (query, page = 1, signal) => {
+export const searchMovies = async (query: string, page = 1, signal?: AbortSignal | null) => {
   return fetchFromTMDB(
     "/search/movie",
     {
@@ -51,7 +72,7 @@ export const searchMovies = async (query, page = 1, signal) => {
   );
 };
 
-export const searchMulti = async (query, page = 1, signal) => {
+export const searchMulti = async (query: string, page = 1, signal?: AbortSignal | null) => {
   return fetchFromTMDB(
     "/search/multi",
     {
@@ -62,19 +83,41 @@ export const searchMulti = async (query, page = 1, signal) => {
   );
 };
 
-export const getMovieDetails = async (id) => {
-  return fetchFromTMDB(`/movie/${id}`, {
-    append_to_response: "credits,videos,similar,recommendations,external_ids",
-  });
+export const getMovieDetails = async (id: number | string, fetchOptions: TmdbFetchOptions = {}) => {
+  return fetchFromTMDB(
+    `/movie/${id}`,
+    {
+      append_to_response: "credits,videos,similar,recommendations,external_ids",
+    },
+    undefined,
+    fetchOptions,
+  );
 };
 
-export const getTVDetails = async (id) => {
-  return fetchFromTMDB(`/tv/${id}`, {
-    append_to_response: "credits,videos,similar,recommendations,external_ids",
-  });
+export const getTVDetails = async (id: number | string, fetchOptions: TmdbFetchOptions = {}) => {
+  return fetchFromTMDB(
+    `/tv/${id}`,
+    {
+      append_to_response: "credits,videos,similar,recommendations,external_ids",
+    },
+    undefined,
+    fetchOptions,
+  );
 };
 
-export const getTrendingAll = async (timeWindow = "week", page = 1, fetchOptions) => {
+const DETAIL_CACHE: TmdbFetchOptions = { next: { revalidate: 3600 } };
+
+export const getMovieDetailsCached = (id: number | string) =>
+  getMovieDetails(id, DETAIL_CACHE);
+
+export const getTVDetailsCached = (id: number | string) =>
+  getTVDetails(id, DETAIL_CACHE);
+
+export const getTrendingAll = async (
+  timeWindow = "week",
+  page = 1,
+  fetchOptions?: TmdbFetchOptions,
+) => {
   return fetchFromTMDB(`/trending/all/${timeWindow}`, { page }, undefined, fetchOptions);
 };
 
@@ -84,6 +127,10 @@ export const getTrendingMovies = async (timeWindow = "week", page = 1) => {
 
 export const getPopularMovies = async (page = 1) => {
   return fetchFromTMDB("/movie/popular", { page });
+};
+
+export const getPopularTV = async (page = 1) => {
+  return fetchFromTMDB("/tv/popular", { page });
 };
 
 export const getTopRatedMovies = async (page = 1) => {
@@ -106,8 +153,19 @@ export const getTVGenres = async () => {
   return fetchFromTMDB("/genre/tv/list");
 };
 
-export const discoverMovies = async (filters = {}) => {
-  const params = {
+export interface DiscoverFilters {
+  sortBy?: string;
+  page?: number;
+  genreIds?: number[];
+  year?: number;
+  minRating?: number;
+  maxRating?: number;
+  releaseDateGte?: string;
+  releaseDateLte?: string;
+}
+
+export const discoverMovies = async (filters: DiscoverFilters = {}) => {
+  const params: TmdbParams = {
     sort_by: filters.sortBy || "popularity.desc",
     page: filters.page || 1,
     "vote_count.gte": 100,
@@ -135,13 +193,13 @@ export const discoverMovies = async (filters = {}) => {
   return fetchFromTMDB("/discover/movie", params);
 };
 
-export const getPersonDetails = async (id) => {
+export const getPersonDetails = async (id: number | string) => {
   return fetchFromTMDB(`/person/${id}`, {
     append_to_response: "movie_credits,external_ids",
   });
 };
 
-export const normalizeMovieForCard = (item) => ({
+export const normalizeMovieForCard = (item: any) => ({
   tmdbId: item.id,
   media_type: item.media_type || "movie",
   title: item.title || item.name,
@@ -151,10 +209,10 @@ export const normalizeMovieForCard = (item) => ({
   overview: item.overview,
   vote_average: item.vote_average,
   vote_count: item.vote_count,
-  genre_ids: item.genre_ids || item.genres?.map((g) => g.id) || [],
+  genre_ids: item.genre_ids || item.genres?.map((g: any) => g.id) || [],
 });
 
-export const normalizeMovieForMinimal = (item) => ({
+export const normalizeMovieForMinimal = (item: any) => ({
   tmdbId: item.id,
   media_type: item.media_type || "movie",
   title: item.title || item.name,
@@ -163,43 +221,3 @@ export const normalizeMovieForMinimal = (item) => ({
   vote_average: item.vote_average ?? null,
 });
 
-export const normalizeMovieForFirestore = (movie) => ({
-  tmdbId: movie.id,
-  media_type: movie.media_type || "movie",
-  title: movie.title || movie.name,
-  original_title: movie.original_title || movie.original_name,
-  release_date: movie.release_date || movie.first_air_date,
-  poster_path: movie.poster_path,
-  backdrop_path: movie.backdrop_path,
-  overview: movie.overview,
-  vote_average: movie.vote_average,
-  vote_count: movie.vote_count,
-  runtime: movie.runtime || movie.episode_run_time?.[0] || null,
-  genres: movie.genres || [],
-  tagline: movie.tagline,
-  status: movie.status,
-  budget: movie.budget || null,
-  revenue: movie.revenue || null,
-  homepage: movie.homepage,
-  imdb_id: movie.imdb_id || null,
-  director:
-    movie.credits?.crew?.find((c) => c.job === "Director")?.name ||
-    movie.created_by?.map((c) => c.name).join(", ") ||
-    null,
-  cast:
-    movie.credits?.cast?.slice(0, 10).map((c) => ({
-      id: c.id,
-      name: c.name,
-      character: c.character,
-      profile_path: c.profile_path,
-    })) || [],
-  trailer: movie.videos?.results?.find(
-    (v) => v.type === "Trailer" && v.site === "YouTube"
-  ) || null,
-  similar:
-    movie.similar?.results?.slice(0, 10).map(normalizeMovieForCard) || [],
-  recommendations:
-    movie.recommendations?.results
-      ?.slice(0, 10)
-      .map(normalizeMovieForCard) || [],
-});

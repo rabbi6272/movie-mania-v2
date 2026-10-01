@@ -75,6 +75,7 @@ export function HomeClient({ trending }: { trending: React.ReactNode }) {
   const watchedCount = savedMovies?.filter((movie) => movie.watched === true).length || 0;
   return (
     <>
+      <h1 className="sr-only">Your MovieMania watchlist</h1>
       <div className="w-full py-5 px-4 md:pl-6 flex items-center overflow-x-auto gap-2 md:gap-4 scrollbar-hide">
         <Button
           onClick={() => setategoryFilter("all")}

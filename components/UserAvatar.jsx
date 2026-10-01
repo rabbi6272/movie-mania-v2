@@ -1,11 +1,8 @@
 "use client";
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
-import toast from "react-hot-toast";
 
 import { useAuth } from "@/hooks/useAuth";
-import { useAuthStore, useMovieStore } from "@/store/store";
 import Image from "next/image";
 import { Button } from "./ui/Button";
 
@@ -111,7 +108,7 @@ export function UserAvatar({
       )}
       {isShowDropdown && (
         <div
-          className="absolute right-1 top-full mt-2 w-30 lg:w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+          className="absolute right-4 top-full mt-2 w-30 lg:w-40 backdrop-blur-xl bg-white/90 rounded-full shadow-lg border border-gray-200 py-1 z-50 overflow-hidden"
           ref={dropdownRef}
         >
           {isAuthenticated ? (
@@ -120,7 +117,7 @@ export function UserAvatar({
                 closeDropdown();
                 logout();
               }}
-              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
+              className="w-full px-4 py-2 text-left text-md font-semibold text-gray-700 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[18px]">
                 logout
@@ -131,7 +128,7 @@ export function UserAvatar({
             <Link
               href="/login"
               onClick={closeDropdown}
-              className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+              className="w-full px-4 py-2 text-left text-md font-semibold text-gray-700 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[18px]">
                 login
