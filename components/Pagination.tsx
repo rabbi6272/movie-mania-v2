@@ -1,4 +1,5 @@
 "use client";
+import { Pagination as HeroPagination } from "@heroui/react";
 
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
   if (totalPages <= 1) return null;
@@ -34,42 +35,43 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   };
 
   return (
-    <div className="flex items-center justify-center gap-1 py-6">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-      >
-        Prev
-      </button>
-
-      {getVisiblePages().map((page, index) =>
-        page === "..." ? (
-          <span key={`dots-${index}`} className="px-2 py-1.5 text-sm text-gray-400">
-            ...
-          </span>
-        ) : (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              currentPage === page
-                ? "bg-blue-500 text-white"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
+    <HeroPagination className="justify-center py-6">
+      <HeroPagination.Content>
+        <HeroPagination.Item>
+          <HeroPagination.Previous
+            onPress={() => onPageChange(currentPage - 1)}
+            isDisabled={currentPage === 1}
           >
-            {page}
-          </button>
-        )
-      )}
+            Prev
+          </HeroPagination.Previous>
+        </HeroPagination.Item>
 
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-      >
-        Next
-      </button>
-    </div>
+        {getVisiblePages().map((page, index) =>
+          page === "..." ? (
+            <HeroPagination.Item key={`dots-${index}`}>
+              <HeroPagination.Ellipsis />
+            </HeroPagination.Item>
+          ) : (
+            <HeroPagination.Item key={page}>
+              <HeroPagination.Link
+                isActive={currentPage === page}
+                onPress={() => onPageChange(page)}
+              >
+                {page}
+              </HeroPagination.Link>
+            </HeroPagination.Item>
+          )
+        )}
+
+        <HeroPagination.Item>
+          <HeroPagination.Next
+            onPress={() => onPageChange(currentPage + 1)}
+            isDisabled={currentPage === totalPages}
+          >
+            Next
+          </HeroPagination.Next>
+        </HeroPagination.Item>
+      </HeroPagination.Content>
+    </HeroPagination>
   );
 }

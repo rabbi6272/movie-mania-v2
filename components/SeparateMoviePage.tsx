@@ -264,24 +264,22 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
 
         {/* Top bar */}
         <div className="absolute top-0 left-0 right-0 p-3 md:p-5 flex items-center justify-between">
-          <button
-            className="h-10 w-10 rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60 active:scale-95 transition-all duration-200 grid place-items-center cursor-pointer"
+          <Button
+            varient="outline"
+            icon="arrow_back"
+            ariaLabel="Go back"
+            className="h-10 w-10 p-0 min-w-10 border-none shadow-none text-white bg-black/40 backdrop-blur-sm hover:bg-black/60"
             onClick={() => router.back()}
-          >
-            <span className="material-symbols-outlined text-white text-xl">
-              arrow_back
-            </span>
-          </button>
+          />
 
           {savedMovie && (
-            <button
-              className="h-10 w-10 rounded-full bg-black/40 backdrop-blur-sm hover:bg-red-500/80 active:scale-95 transition-all duration-200 grid place-items-center cursor-pointer group"
+            <Button
+              varient="outline"
+              icon="delete"
+              ariaLabel="Delete"
+              className="h-10 w-10 p-0 min-w-10 border-none shadow-none text-white bg-black/40 backdrop-blur-sm hover:bg-red-500/80"
               onClick={handleDelete}
-            >
-              <span className="material-symbols-outlined text-white text-xl group-hover:text-white">
-                delete
-              </span>
-            </button>
+            />
           )}
         </div>
       </div>
@@ -461,7 +459,6 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
             <div className="flex flex-col gap-3 mt-8">
               <div className="flex gap-3">
                 <Button
-                  disabled={isWatchlisted}
                   loading={isLoading}
                   onClick={handleAddToWatchlist}
                   varient={isWatchlisted ? "primary" : "outline"}
@@ -475,7 +472,6 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
                 </Button>
 
                 <Button
-                  disabled={isWatched}
                   onClick={handleAddToWatched}
                   loading={isLoading2}
                   className="flex-1 flex items-center justify-center gap-2"

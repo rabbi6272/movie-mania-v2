@@ -6,6 +6,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 
 import { useAuth } from "@/hooks/useAuth";
+import { Input, Label } from "@heroui/react";
 import { Button } from "@/components/ui/Button";
 
 export function LoginForm() {
@@ -92,10 +93,10 @@ export function LoginForm() {
         <h1 className="text-3xl text-gray-700 font-medium text-center mb-2">Log In</h1>
 
         <div>
-          <label htmlFor="email" className="pl-2 text-sm md:text-base font-semibold text-gray-600">
+          <Label htmlFor="email" className="pl-2 text-sm md:text-base font-semibold text-gray-600">
             Email*
-          </label>
-          <input
+          </Label>
+          <Input
             required
             placeholder="someone@gmail.com"
             type={"text"}
@@ -107,10 +108,10 @@ export function LoginForm() {
         </div>
 
         <div className="relative">
-          <label htmlFor="password" className="pl-2 text-sm md:text-base font-semibold text-gray-600">
+          <Label htmlFor="password" className="pl-2 text-sm md:text-base font-semibold text-gray-600">
             Password*{" "}
-          </label>
-          <input
+          </Label>
+          <Input
             required
             placeholder="******"
             type={showPassword ? "text" : "password"}
@@ -121,16 +122,14 @@ export function LoginForm() {
               setFormData({ ...formData, password: e.target.value })
             }
           />
-          <button
+          <Button
             type="button"
+            varient="outline"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-6 top-[30%] translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
-            aria-label={showPassword ? "Hide password" : "Show password"}
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
-              {showPassword ? "visibility" : "visibility_off"}
-            </span>
-          </button>
+            className="absolute right-6 top-[30%] translate-y-1/2 h-auto min-w-0 p-0 border-none shadow-none bg-transparent hover:bg-transparent text-gray-400 hover:text-gray-600"
+            ariaLabel={showPassword ? "Hide password" : "Show password"}
+            icon={showPassword ? "visibility" : "visibility_off"}
+          />
         </div>
 
         <p className="w-full text-sm mt-3 text-gray-500">
@@ -152,10 +151,11 @@ export function LoginForm() {
           <div className="flex-1 h-px bg-gray-200"></div>
         </div>
 
-        <button
+        <Button
           type="button"
+          varient="outline"
           onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 border border-gray-300 rounded-full bg-white hover:bg-gray-50 transition-colors cursor-pointer"
+          className="w-full bg-white"
         >
           <svg width="20" height="20" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -164,7 +164,7 @@ export function LoginForm() {
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
           </svg>
           <span className="text-sm font-semibold text-gray-700">Continue with Google</span>
-        </button>
+        </Button>
       </form>
 
     </div>

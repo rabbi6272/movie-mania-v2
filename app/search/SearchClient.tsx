@@ -78,16 +78,15 @@ export function SearchClient() {
         {hasQuery && (
           <div className="flex items-center justify-center gap-2 mt-4">
             {MEDIA_FILTERS.map((filter) => (
-              <button
+              <Button
                 key={filter.value}
                 onClick={() => setMediaFilter(filter.value)}
-                className={`text-xs md:text-sm font-semibold rounded-full px-4 py-1.5 border border-gray-300 shadow-sm transition-all duration-300 cursor-pointer ${mediaFilter === filter.value
-                  ? "bg-black text-white"
-                  : "bg-transparent text-gray-600 hover:bg-gray-50"
-                  }`}
+                varient={mediaFilter === filter.value ? "primary" : "outline"}
+                size="sm"
+                className="md:text-sm px-4"
               >
                 {filter.label}
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -182,13 +181,15 @@ export function SearchClient() {
           </p>
           <div className="flex items-center justify-center gap-2 mt-4 max-w-md">
             {SUGGESTED_SEARCHES.map((suggestion) => (
-              <button
+              <Button
                 key={suggestion}
                 onClick={() => setSearchQuery(suggestion)}
-                className="text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-full px-3.5 py-1.5 hover:bg-gray-50 transition-colors cursor-pointer"
+                varient="outline"
+                size="sm"
+                className="bg-white"
               >
                 {suggestion}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

@@ -1,10 +1,9 @@
 "use client";
-import { useState, useCallback, useMemo, useRef } from "react";
-import Link from "next/link";
+import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { Avatar, Dropdown } from "@heroui/react";
 
 import { useAuth } from "@/hooks/useAuth";
-import Image from "next/image";
-import { Button } from "./ui/Button";
 
 const AVATAR_COLORS = [
   "bg-blue-500",
@@ -63,11 +62,7 @@ export function UserAvatar({
   displayName = null,
   email = null,
 }) {
-  const [isShowDropdown, setIsShowDropdown] = useState(false);
-  const toggleDropdown = useCallback(() => setIsShowDropdown((prev) => !prev), []);
-  const closeDropdown = useCallback(() => setIsShowDropdown(false), []);
-  const dropdownRef = useRef(null);
-
+  const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
 
   const initials = useMemo(
@@ -78,67 +73,37 @@ export function UserAvatar({
   const bgColor = useMemo(() => getAvatarColor(colorKey), [colorKey]);
 
   const sizeClass = SIZE_CLASSES[size];
-  const avatarSize = size === "sm" ? 32 : size === "md" ? 36 : 48;
   const avatarAlt = displayName ?? email ?? "User avatar";
+  const itemClass = "px-4 py-2 text-md font-semibold text-gray-700 flex items-center gap-2 cursor-pointer";
   return (
-    <>
-      {isAuthenticated ? (
-        user?.photoURL ? (
-          <Image
-            onClick={toggleDropdown}
-            src={user.photoURL}
-            alt={avatarAlt}
-            width={avatarSize}
-            height={avatarSize}
-            className={`relative cursor-pointer rounded-full object-cover ${sizeClass} ${className}`}
-          />
+    <Dropdown>
+      <Dropdown.Trigger aria-label="Account menu" className="rounded-full cursor-pointer">
+        {isAuthenticated ? (
+          <Avatar className={`${sizeClass} ${className}`}>
+            {user?.photoURL && <Avatar.Image src={user.photoURL} alt={avatarAlt} className="object-cover" />}
+            <Avatar.Fallback className={`${bgColor} text-white font-semibold`}>{initials}</Avatar.Fallback>
+          </Avatar>
         ) : (
-          <div
-            onClick={toggleDropdown}
-            className={`flex items-center justify-center rounded-full cursor-pointer ${bgColor} text-white font-semibold ${sizeClass} ${className}`}
-          >
-            {initials}
-          </div>
-        )
-      ) : (
-        <Button
-          onClick={toggleDropdown}
-          size="md" icon="person" varient="outline" className="border-none shadow-none"
-        />
-      )}
-      {isShowDropdown && (
-        <div
-          className="absolute right-4 top-full mt-2 w-30 lg:w-40 backdrop-blur-xl bg-white/90 rounded-full shadow-lg border border-gray-200 py-1 z-50 overflow-hidden"
-          ref={dropdownRef}
-        >
+          <span className="material-symbols-outlined grid place-items-center h-10 w-10 text-gray-900" style={{ fontSize: 20 }}>
+            person
+          </span>
+        )}
+      </Dropdown.Trigger>
+      <Dropdown.Popover className="min-w-30 lg:min-w-40">
+        <Dropdown.Menu onAction={(key) => (key === "logout" ? logout() : router.push("/login"))}>
           {isAuthenticated ? (
-            <button
-              onClick={() => {
-                closeDropdown();
-                logout();
-              }}
-              className="w-full px-4 py-2 text-left text-md font-semibold text-gray-700 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">
-                logout
-              </span>
+            <Dropdown.Item id="logout" textValue="Logout" className={itemClass}>
+              <span className="material-symbols-outlined text-[18px]">logout</span>
               Logout
-            </button>
+            </Dropdown.Item>
           ) : (
-            <Link
-              href="/login"
-              onClick={closeDropdown}
-              className="w-full px-4 py-2 text-left text-md font-semibold text-gray-700 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">
-                login
-              </span>
+            <Dropdown.Item id="login" textValue="Login" className={itemClass}>
+              <span className="material-symbols-outlined text-[18px]">login</span>
               Login
-            </Link>
+            </Dropdown.Item>
           )}
-        </div>
-      )}
-    </>
+        </Dropdown.Menu>
+      </Dropdown.Popover>
+    </Dropdown>
   )
 }
-
