@@ -7,8 +7,8 @@ interface MovieStore {
   setSavedMovies: (savedMovies: any[]) => void;
   removeSavedMovie: (id: string) => void;
 
-  movieDetailsCache: Record<number, any>;
-  setMovieDetails: (id: number, data: any) => void;
+  movieDetailsCache: Record<string, any>;
+  setMovieDetails: (id: string, data: any) => void;
 
   searchQuery: string;
   setSearchQuery: (searchQuery: string) => void;

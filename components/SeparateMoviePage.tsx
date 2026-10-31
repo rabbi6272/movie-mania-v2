@@ -264,24 +264,21 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
 
         {/* Top bar */}
         <div className="absolute top-0 left-0 right-0 p-3 md:p-5 flex items-center justify-between">
-          <button
-            className="h-10 w-10 rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60 active:scale-95 transition-all duration-200 grid place-items-center cursor-pointer"
+          <Button
+            varient="glass"
+            icon="arrow_back"
+            ariaLabel="Go back"
             onClick={() => router.back()}
-          >
-            <span className="material-symbols-outlined text-white text-xl">
-              arrow_back
-            </span>
-          </button>
+          />
 
           {savedMovie && (
-            <button
-              className="h-10 w-10 rounded-full bg-black/40 backdrop-blur-sm hover:bg-red-500/80 active:scale-95 transition-all duration-200 grid place-items-center cursor-pointer group"
+            <Button
+              varient="glass"
+              icon="delete"
+              ariaLabel="Remove from library"
+              className="hover:bg-red-500/80"
               onClick={handleDelete}
-            >
-              <span className="material-symbols-outlined text-white text-xl group-hover:text-white">
-                delete
-              </span>
-            </button>
+            />
           )}
         </div>
       </div>
@@ -317,7 +314,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
                 {title}
               </h1>
               {mediaType === "tv" && (
-                <span className="absolute -top-6 right-6 bg-blue-500 text-white text-xs font-bold px-2.5 py-1 rounded-full mt-1.5 uppercase tracking-wide">
+                <span className="absolute -top-6 right-6 bg-black text-white text-xs font-bold px-2.5 py-1 rounded-full mt-1.5 uppercase tracking-wide">
                   TV Series
                 </span>
               )}
@@ -458,61 +455,52 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
             )}
 
             {/* Action Buttons */}
-            <div className="flex flex-col gap-3 mt-8">
-              <div className="flex gap-3">
-                <Button
-                  disabled={isWatchlisted}
-                  loading={isLoading}
-                  onClick={handleAddToWatchlist}
-                  varient={isWatchlisted ? "primary" : "outline"}
-                  size="md"
-                  className="flex-1 flex items-center justify-center gap-2"
-                >
-                  <span className="material-symbols-outlined text-lg">
-                    {isWatchlisted ? "bookmark_added" : "bookmark_add"}
-                  </span>
-                  {isWatchlisted ? "In Watchlist" : "Want to Watch"}
-                </Button>
-
-                <Button
-                  disabled={isWatched}
-                  onClick={handleAddToWatched}
-                  loading={isLoading2}
-                  className="flex-1 flex items-center justify-center gap-2"
-                  size="md"
-                  varient={isWatched ? "primary" : "outline"}
-                >
-                  <span className="material-symbols-outlined text-lg">
-                    {isWatched ? "check_circle" : "visibility"}
-                  </span>
-                  {isWatched ? "Already Watched" : "Mark as Watched"}
-                </Button>
-              </div>
-
+            {/* One primary action, then library state toggles; a saved state reads as a soft filled chip */}
+            <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
               {videoTrailerKey && (
                 <Button
+                  varient="3d"
+                  size="lg"
+                  icon="play_arrow"
+                  className="w-full sm:w-auto sm:px-7"
                   onClick={() => setShowTrailer(true)}
-                  varient="outline"
-                  size="md"
-                  className="flex-1 flex items-center justify-center gap-2"
                 >
-                  <span className="material-symbols-outlined text-lg">
-                    play_arrow
-                  </span>
                   Play Trailer
                 </Button>
               )}
 
-              <Button
-                onClick={handleOpenPlaylistModal}
-                className="flex-1 flex items-center justify-center gap-2"
-                size="md"
-                varient="outline">
-                <span className="material-symbols-outlined text-lg">
-                  playlist_add
-                </span>
-                Add to Playlist
-              </Button>
+              <div className="grid grid-cols-[1fr_1fr_auto] sm:flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                <Button
+                  size="md"
+                  varient={isWatchlisted ? "primary" : "outline"}
+                  icon={isWatchlisted ? "bookmark_added" : "bookmark_add"}
+                  loading={isLoading}
+                  className={`w-full sm:w-auto !px-2.5 sm:!px-6 !text-xs sm:!text-sm min-w-0 ${isWatchlisted ? "button--watchlisted" : ""}`}
+                  onClick={handleAddToWatchlist}
+                >
+                  <span className="truncate">{isWatchlisted ? "In Watchlist" : "Watchlist"}</span>
+                </Button>
+
+                <Button
+                  size="md"
+                  varient={isWatched ? "primary" : "outline"}
+                  icon={isWatched ? "check_circle" : "visibility"}
+                  loading={isLoading2}
+                  className={`w-full sm:w-auto !px-2.5 sm:!px-6 !text-xs sm:!text-sm min-w-0 ${isWatched ? "button--watched" : ""}`}
+                  onClick={handleAddToWatched}
+                >
+                  <span className="truncate">{isWatched ? "Watched" : "Mark Watched"}</span>
+                </Button>
+
+                <Button
+                  size="md"
+                  varient="outline"
+                  icon="playlist_add"
+                  ariaLabel="Add to playlist"
+                  className="shrink-0"
+                  onClick={handleOpenPlaylistModal}
+                />
+              </div>
             </div>
           </div>
         </div>

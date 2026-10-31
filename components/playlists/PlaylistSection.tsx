@@ -59,7 +59,7 @@ export function PlaylistSection({ userID }: { userID: string | null }) {
           My Playlists
         </h2>
 
-        <Button onClick={() => setIsCreateOpen(true)} size="md" icon="add">
+        <Button varient="3d" onClick={() => setIsCreateOpen(true)} size="md" icon="add">
           <span className="hidden sm:inline">Create Playlist</span>
           <span className="sm:hidden">Create</span>
         </Button>
@@ -76,6 +76,7 @@ export function PlaylistSection({ userID }: { userID: string | null }) {
           <span className="material-symbols-outlined text-4xl text-gray-300">video_library</span>
           <p className="text-sm text-gray-500 mt-2">No playlists yet</p>
           <Button
+            varient="3d"
             onClick={() => setIsCreateOpen(true)}
             size="md"
             className="mt-3"

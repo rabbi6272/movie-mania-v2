@@ -16,15 +16,15 @@ export function GuestHeroSection() {
 				<Button
 					href="/search"
 					varient="primary"
-					size="md"
+					size="lg"
 					icon="search"
 				>
 					Browse movies
 				</Button>
 				<Button
 					href="/signup"
-					varient="primary"
-					size="md"
+					varient="outline"
+					size="lg"
 					icon="person_add"
 				>
 					Create account

@@ -66,7 +66,7 @@ export function PlaylistCard({
           </p>
         )}
         {playlist.shareToken && (
-          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 mt-1.5">
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-700 mt-1.5">
             <span className="material-symbols-outlined text-xs">link</span>
             Shared
           </span>

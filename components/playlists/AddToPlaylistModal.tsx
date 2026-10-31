@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Button, Spinner } from "@heroui/react";
 
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -89,7 +90,7 @@ export function AddToPlaylistModal({
       <div className="max-h-[50vh] overflow-y-auto">
         {playlistsLoading ? (
           <div className="py-8 flex justify-center">
-            <span className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+            <Spinner color="current" className="text-gray-600" />
           </div>
         ) : !userID ? (
           <p className="text-sm text-gray-500 text-center py-6">
@@ -106,10 +107,12 @@ export function AddToPlaylistModal({
               const isBusy = membershipLoading && !(playlist.id in membership);
               return (
                 <li key={playlist.id}>
-                  <button
-                    onClick={() => handleToggle(playlist.id, playlist.name)}
-                    disabled={isBusy}
-                    className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-lg text-sm hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+                  <Button
+                    variant="ghost"
+                    fullWidth
+                    onPress={() => handleToggle(playlist.id, playlist.name)}
+                    isDisabled={isBusy}
+                    className="justify-between gap-3 px-3.5 rounded-lg font-normal"
                   >
                     <span className="flex items-center gap-2.5 min-w-0">
                       <span className="material-symbols-outlined text-gray-400 text-xl">
@@ -134,7 +137,7 @@ export function AddToPlaylistModal({
                       </span>
                       {isAdded ? "Added" : "Add"}
                     </span>
-                  </button>
+                  </Button>
                 </li>
               );
             })}
@@ -142,13 +145,15 @@ export function AddToPlaylistModal({
         )}
       </div>
 
-      <button
-        onClick={() => setIsCreateOpen(true)}
-        className="mt-4 w-full flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer"
+      <Button
+        variant="secondary"
+        fullWidth
+        onPress={() => setIsCreateOpen(true)}
+        className="mt-4"
       >
-        <span className="material-symbols-outlined text-base">add</span>
+        <span className="material-symbols-outlined">add</span>
         New playlist
-      </button>
+      </Button>
 
       {isCreateOpen && (
         <CreatePlaylistModal

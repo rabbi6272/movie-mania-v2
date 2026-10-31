@@ -12,7 +12,7 @@ export function EmptyLibrary() {
 			</p>
 			<Button
 				href="/search"
-				className="mt-5 text-sm font-semibold text-white bg-gray-900 rounded-full px-5 py-2 hover:bg-gray-800 transition-colors"
+				className="mt-5"
 			>
 				Browse movies
 			</Button>

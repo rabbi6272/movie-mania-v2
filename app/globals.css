@@ -1,58 +1,224 @@
 @import "tailwindcss";
+@import "@heroui/styles";
+
+/* ── Buttons: one size scale and one lighting model for every HeroUI button.
+   Same layer as HeroUI so these win by source order, while Tailwind utilities
+   passed through className still win over both. Order matters: sizes and
+   icon-only must come after the base rule. */
+@layer components {
+  .button {
+    --button-shadow: none;
+    --button-shadow-hover: var(--button-shadow);
+    --button-shadow-pressed: var(--button-shadow);
+    height: 2.5rem;
+    padding-inline: 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    box-shadow: var(--button-shadow);
+    transition:
+      transform 200ms var(--ease-smooth),
+      background-color 150ms ease,
+      box-shadow 200ms ease,
+      color 150ms ease;
+  }
+
+  .button .material-symbols-outlined {
+    font-size: 1.125rem;
+  }
+
+  .button--sm {
+    height: 2rem;
+    padding-inline: 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .button--sm .material-symbols-outlined {
+    font-size: 1rem;
+  }
+
+  .button--lg {
+    height: 3rem;
+    padding-inline: 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .button--lg .material-symbols-outlined {
+    font-size: 1.25rem;
+  }
+
+  .button--icon-only {
+    width: 2.5rem;
+    padding-inline: 0;
+  }
+
+  .button--icon-only.button--sm {
+    width: 2rem;
+  }
+
+  .button--icon-only.button--lg {
+    width: 3rem;
+  }
+
+  /* raised variants lift on hover and settle on press */
+  @media (hover: hover) {
+    .button:hover:not(:disabled, [aria-disabled="true"], [data-pending="true"]) {
+      box-shadow: var(--button-shadow-hover);
+    }
+
+    :is(.button--primary, .button--outline):hover:not(:disabled, [aria-disabled="true"], [data-pending="true"]) {
+      transform: translateY(-1px);
+    }
+
+    .button--3d:hover:not(:disabled, [aria-disabled="true"], [data-pending="true"]) {
+      transform: translateY(-1px);
+    }
+  }
+
+  .button:active,
+  .button[data-pressed="true"] {
+    transform: translateY(0) scale(0.97);
+    box-shadow: var(--button-shadow-pressed);
+  }
+
+  /* 3D push-down translation when clicked / pressed matching Button3DV2 mechanics */
+  .button--3d:active,
+  .button--3d[data-pressed="true"],
+  .button--3d.button--sm:active,
+  .button--3d.button--sm[data-pressed="true"],
+  .button--3d.button--lg:active,
+  .button--3d.button--lg[data-pressed="true"] {
+    transform: translateY(4px) !important;
+    box-shadow: var(--button-shadow-pressed) !important;
+  }
+
+  /* Primary button: Minimal pure black with smooth top highlight and dark shadow */
+  .button--primary {
+    --button-bg: #000000;
+    --button-bg-hover: #1f2937;
+    --button-bg-pressed: #111827;
+    --button-fg: #ffffff;
+    background-color: var(--button-bg);
+    color: var(--button-fg);
+    border: none;
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 60%);
+    --button-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 1px 2px rgb(0 0 0 / 0.2), 0 4px 12px -4px rgb(0 0 0 / 0.4);
+    --button-shadow-hover: inset 0 1px 0 rgb(255 255 255 / 0.24), 0 2px 4px rgb(0 0 0 / 0.25), 0 8px 18px -4px rgb(0 0 0 / 0.5);
+    --button-shadow-pressed: inset 0 1px 2px rgb(0 0 0 / 0.4);
+  }
+
+  /* 3D button variant: Minimalist monochrome Gray / Black */
+  .button--3d {
+    --button-bg: #1f2937;
+    --button-bg-hover: #374151;
+    --button-bg-pressed: #111827;
+    --button-fg: #ffffff;
+    background-color: var(--button-bg);
+    color: var(--button-fg);
+    background-image: none !important;
+    border-radius: 9999px;
+    border: 1.5px solid #000000 !important;
+    border-bottom: 2px solid #000000 !important;
+    box-shadow: 0 4px 0 0 #000000;
+    --button-shadow: 0 4px 0 0 #000000;
+    --button-shadow-hover: 0 5px 0 0 #000000, 0 8px 16px -4px rgba(0, 0, 0, 0.45);
+    --button-shadow-pressed: 0 0 0 0 #000000;
+    transition: transform 100ms ease, box-shadow 100ms ease, background-color 150ms ease;
+    font-weight: 700;
+    font-size: 0.905rem;
+  }
+
+  .button--outline {
+    --button-bg: var(--color-white);
+    --button-bg-hover: var(--color-gray-50);
+    --button-bg-pressed: var(--color-gray-100);
+    --button-fg: var(--color-gray-900);
+    border: 1px solid rgb(0 0 0 / 0.15);
+    border-color: rgb(0 0 0 / 0.15);
+    --button-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.05);
+    --button-shadow-hover: 0 1px 2px rgb(0 0 0 / 0.06), 0 6px 14px -6px rgb(0 0 0 / 0.15);
+    --button-shadow-pressed: inset 0 1px 2px rgb(0 0 0 / 0.08);
+  }
+
+  .button--secondary {
+    --button-bg: var(--color-gray-100);
+    --button-bg-hover: var(--color-gray-200);
+    --button-bg-pressed: var(--color-gray-200);
+    --button-fg: var(--color-gray-900);
+    --button-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), inset 0 0 0 1px rgb(16 24 40 / 0.06);
+  }
+
+  .button--ghost {
+    --button-bg-hover: var(--color-gray-100);
+    --button-bg-pressed: var(--color-gray-200);
+    --button-fg: var(--color-gray-700);
+  }
+
+  .button--danger {
+    --button-bg: #111827;
+    --button-bg-hover: #1f2937;
+    --button-bg-pressed: #000000;
+    --button-fg: var(--color-white);
+    --button-shadow: inset 0 1px 0 rgb(255 255 255 / 0.15), 0 1px 2px rgb(0 0 0 / 0.25);
+    --button-shadow-hover: inset 0 1px 0 rgb(255 255 255 / 0.2), 0 4px 10px -2px rgb(0 0 0 / 0.35);
+    --button-shadow-pressed: inset 0 1px 2px rgb(0 0 0 / 0.3);
+  }
+
+  .button--danger-soft {
+    --button-bg: var(--color-gray-100);
+    --button-bg-hover: var(--color-gray-200);
+    --button-bg-pressed: var(--color-gray-300);
+    --button-fg: var(--color-gray-800);
+    --button-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1);
+  }
+
+  /* saved-state toggles on the detail page; minimalist black/gray chips */
+  .button--watchlisted {
+    --button-bg: var(--color-gray-900);
+    --button-bg-hover: var(--color-gray-800);
+    --button-bg-pressed: var(--color-black);
+    --button-fg: var(--color-white);
+    --button-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+  }
+
+  .button--watched {
+    --button-bg: var(--color-gray-900);
+    --button-bg-hover: var(--color-gray-800);
+    --button-bg-pressed: var(--color-black);
+    --button-fg: var(--color-white);
+    --button-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+  }
+
+  /* frosted control that sits on top of imagery */
+  .button--glass {
+    --button-bg: rgb(0 0 0 / 0.45);
+    --button-bg-hover: rgb(0 0 0 / 0.65);
+    --button-bg-pressed: rgb(0 0 0 / 0.75);
+    --button-fg: var(--color-white);
+    border: 1px solid rgb(255 255 255 / 0.18);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(140%);
+    --button-shadow: inset 0 1px 0 rgb(255 255 255 / 0.15), 0 4px 16px -4px rgb(0 0 0 / 0.4);
+  }
+
+  .pagination__link[data-active="true"] {
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0) 60%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 4px 12px -4px rgb(0 0 0 / 0.35);
+  }
+}
 
 @custom-variant dark (&:is(.dark *));
-
-@theme {
-  --color-pBlue-50: "#f1fafe";
-  --color-pBlue-100: "#e1f3fd";
-  --color-pBlue-200: "#bde8fa";
-  --color-pBlue-300: "#83d6f6";
-  --color-pBlue-400: "#31bced";
-  --color-pBlue-500: "#19aade";
-  --color-pBlue-600: "#0c89bd";
-  --color-pBlue-700: "#0b6e99";
-  --color-pBlue-800: "#0d5c7f";
-  --color-pBlue-900: "#114d69";
-  --color-pBlue-950: "#0b3146";
-}
 
 :root {
   --text-color: #ffffff;
   --backgeound: #171717;
-  --link: #61dafb;
   --bg: #282c34;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* HeroUI accent = pure black primary */
+  --accent: #000000;
+  --accent-hover: #1f2937;
+  --accent-foreground: #ffffff;
 }
 
 ::-webkit-scrollbar {
@@ -84,82 +250,8 @@ body {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-}
 
 .show {
   transform: translateY(0);
@@ -586,9 +678,13 @@ body {
   }
 }
 
-/* the pill floats clear of the viewport edge only once it is a pill */
+/* the pill floats clear of the viewport edge only once it is a pill.
+   7 + 56 + 7 = 70, the resting bar height: the sticky shell is in flow, so any
+   height change shifts the page, scroll anchoring moves scrollY, and on slow
+   touch scrolls that pushes it back across the threshold and the bar flip-flops.
+   Padding and min-height share one duration and easing, so the sum stays 70 mid-transition too. */
 .gnav-shell[data-scrolled="true"] {
-  padding-block: 8px;
+  padding-block: 7px;
 }
 
 .gnav-bar {

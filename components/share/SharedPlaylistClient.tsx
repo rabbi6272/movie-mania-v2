@@ -9,7 +9,7 @@ import { getPosterURL } from "@/api/tmdb";
 import type { Movie } from "@/types/movie";
 
 import { SmallMovieCard } from "@/components/SmallMovieCard";
-import { Loader } from "@/components/ui/loader";
+import { CardGridSkeleton } from "@/components/ui/CardGridSkeleton";
 
 export function SharedPlaylistClient() {
   const { token } = useParams();
@@ -23,8 +23,8 @@ export function SharedPlaylistClient() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
-        <Loader />
+      <div className="max-w-6xl mx-auto px-2 md:px-8 pb-12">
+        <CardGridSkeleton className="w-full grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-0.5 md:gap-2 mt-6" />
       </div>
     );
   }
@@ -37,7 +37,7 @@ export function SharedPlaylistClient() {
         <p className="text-sm text-gray-400 mt-1">
           This share link is invalid or has been revoked.
         </p>
-        <Link href="/" className="text-sm font-semibold text-blue-600 hover:underline mt-4">
+        <Link href="/" className="text-sm font-semibold text-gray-800 hover:text-black hover:underline mt-4">
           Go to MovieMania
         </Link>
       </div>

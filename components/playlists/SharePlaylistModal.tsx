@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Button, Input, Spinner } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -101,7 +102,7 @@ export function SharePlaylistModal({
     <ModalShell title="Share Playlist" onClose={onClose}>
       {isLoading ? (
         <div className="py-8 flex justify-center">
-          <span className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+          <Spinner color="current" className="text-gray-600" />
         </div>
       ) : !isOwner ? (
         <p className="text-sm text-gray-500 text-center py-6">
@@ -113,29 +114,24 @@ export function SharePlaylistModal({
             Anyone with this link can view your playlist.
           </p>
           <div className="flex items-center gap-2">
-            <input
+            <Input
               readOnly
+              aria-label="Share link"
               value={shareUrl(token)}
               onFocus={(e) => e.target.select()}
-              className="flex-1 px-3 py-2.5 rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-600 truncate focus:outline-none"
+              className="flex-1 truncate"
             />
-            <button
-              onClick={handleCopy}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 transition-colors cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-base">
+            <Button onPress={handleCopy}>
+              <span className="material-symbols-outlined">
                 {isCopied ? "check" : "content_copy"}
               </span>
               {isCopied ? "Copied" : "Copy"}
-            </button>
+            </Button>
           </div>
-          <button
-            onClick={handleRevoke}
-            className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-base">link_off</span>
+          <Button onPress={handleRevoke} variant="danger-soft" fullWidth>
+            <span className="material-symbols-outlined">link_off</span>
             Revoke link
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="space-y-4 py-2 text-center">
@@ -145,18 +141,14 @@ export function SharePlaylistModal({
           <p className="text-sm text-gray-600">
             Generate a link to share this playlist with anyone.
           </p>
-          <button
-            onClick={handleGenerate}
-            disabled={isGenerating}
-            className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
-          >
+          <Button onPress={handleGenerate} isPending={isGenerating} fullWidth>
             {isGenerating ? (
-              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <Spinner size="sm" color="current" />
             ) : (
-              <span className="material-symbols-outlined text-base">link</span>
+              <span className="material-symbols-outlined">link</span>
             )}
             Generate share link
-          </button>
+          </Button>
         </div>
       )}
     </ModalShell>

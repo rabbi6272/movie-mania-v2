@@ -7,14 +7,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { getAllMovies } from "@/hooks/useMoviesServices";
 
 import { Button } from "@/components/ui/Button";
-import { Loader } from "@/components/ui/loader";
+import { CardGridSkeleton } from "@/components/ui/CardGridSkeleton";
 import { SmallMovieCard } from "@/components/SmallMovieCard";
 import { PlaylistSection } from "@/components/playlists/PlaylistSection";
 import { GuestHeroSection } from "@/components/home/GuestHeroSection";
 import { EmptyLibrary } from "@/components/home/EmptyLibrary";
 
 export function HomeClient({ trending }: { trending: React.ReactNode }) {
-  const [categoryFilter, setategoryFilter] = useState<"all" | "wantToWatch" | "watched">("all");
+  const [categoryFilter, setategoryFilter] = useState<"all" | "wantToWatch" | "watched">("wantToWatch");
   const [mediaTypeFilter, setMediaTypeFilter] = useState<("movie" | "tv")[]>([]);
   const { userID } = useAuth();
   const setSavedMovies = useMovieStore((state) => state.setSavedMovies);
@@ -57,9 +57,7 @@ export function HomeClient({ trending }: { trending: React.ReactNode }) {
 
   if (userID && moviesLoading) {
     return (
-      <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
-        <Loader />
-      </div>
+      <CardGridSkeleton className="w-full grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-1 md:gap-2 xl:gap-3 px-2 md:px-4 py-5" />
     );
   }
 
@@ -80,30 +78,30 @@ export function HomeClient({ trending }: { trending: React.ReactNode }) {
         <Button
           onClick={() => setategoryFilter("all")}
           varient={categoryFilter === "all" ? "primary" : "outline"}
-          size="md">
+          size="sm">
           All
         </Button>
         <Button
           varient={categoryFilter === "wantToWatch" ? "primary" : "outline"}
-          size="md"
+          size="sm"
           onClick={() => setategoryFilter("wantToWatch")}>
           Want to Watch
         </Button>
         <Button
           varient={categoryFilter === "watched" ? "primary" : "outline"}
-          size="md"
+          size="sm"
           onClick={() => setategoryFilter("watched")}>
           Watched
         </Button>
         <Button
           varient={mediaTypeFilter.includes("movie") ? "primary" : "outline"}
-          size="md"
+          size="sm"
           onClick={() => toggleMediaType("movie")}>
           Movie
         </Button>
         <Button
           varient={mediaTypeFilter.includes("tv") ? "primary" : "outline"}
-          size="md"
+          size="sm"
           onClick={() => toggleMediaType("tv")}>
           Tv Series
         </Button>
