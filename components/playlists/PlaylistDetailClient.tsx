@@ -90,7 +90,7 @@ export function PlaylistDetailClient() {
         <p className="text-sm text-gray-400">
           It may have been deleted or the link is invalid.
         </p>
-        <Link href="/" className="text-sm font-semibold text-blue-600 hover:underline mt-2">
+        <Link href="/" className="text-sm font-semibold text-gray-800 hover:text-black hover:underline mt-2">
           Go home
         </Link>
       </div>
@@ -139,7 +139,7 @@ export function PlaylistDetailClient() {
                     {playlist.name}
                   </h1>
                   {playlist.shareToken && (
-                    <span className="flex items-center gap-1 text-[10px] font-bold text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-gray-800 bg-gray-100 border border-gray-300 px-2 py-0.5 rounded-full">
                       <span className="material-symbols-outlined text-xs">link</span>
                       Shared
                     </span>

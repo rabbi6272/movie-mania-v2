@@ -314,7 +314,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
                 {title}
               </h1>
               {mediaType === "tv" && (
-                <span className="absolute -top-6 right-6 bg-blue-500 text-white text-xs font-bold px-2.5 py-1 rounded-full mt-1.5 uppercase tracking-wide">
+                <span className="absolute -top-6 right-6 bg-black text-white text-xs font-bold px-2.5 py-1 rounded-full mt-1.5 uppercase tracking-wide">
                   TV Series
                 </span>
               )}
@@ -459,6 +459,7 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
             <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
               {videoTrailerKey && (
                 <Button
+                  varient="3d"
                   size="lg"
                   icon="play_arrow"
                   className="w-full sm:w-auto sm:px-7"
@@ -468,34 +469,35 @@ export function SeparateMoviePage({ contentId, mediaType = "movie" }) {
                 </Button>
               )}
 
-              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:flex gap-3">
+              <div className="grid grid-cols-[1fr_1fr_auto] sm:flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <Button
-                  size="lg"
-                  varient={isWatchlisted ? "secondary" : "outline"}
+                  size="md"
+                  varient={isWatchlisted ? "primary" : "outline"}
                   icon={isWatchlisted ? "bookmark_added" : "bookmark_add"}
                   loading={isLoading}
-                  className="w-full sm:w-auto px-3 sm:px-6"
+                  className={`w-full sm:w-auto !px-2.5 sm:!px-6 !text-xs sm:!text-sm min-w-0 ${isWatchlisted ? "button--watchlisted" : ""}`}
                   onClick={handleAddToWatchlist}
                 >
-                  {isWatchlisted ? "In Watchlist" : "Watchlist"}
+                  <span className="truncate">{isWatchlisted ? "In Watchlist" : "Watchlist"}</span>
                 </Button>
 
                 <Button
-                  size="lg"
-                  varient={isWatched ? "secondary" : "outline"}
+                  size="md"
+                  varient={isWatched ? "primary" : "outline"}
                   icon={isWatched ? "check_circle" : "visibility"}
                   loading={isLoading2}
-                  className="w-full sm:w-auto px-3 sm:px-6"
+                  className={`w-full sm:w-auto !px-2.5 sm:!px-6 !text-xs sm:!text-sm min-w-0 ${isWatched ? "button--watched" : ""}`}
                   onClick={handleAddToWatched}
                 >
-                  {isWatched ? "Watched" : "Mark Watched"}
+                  <span className="truncate">{isWatched ? "Watched" : "Mark Watched"}</span>
                 </Button>
 
                 <Button
-                  size="lg"
+                  size="md"
                   varient="outline"
                   icon="playlist_add"
                   ariaLabel="Add to playlist"
+                  className="shrink-0"
                   onClick={handleOpenPlaylistModal}
                 />
               </div>

@@ -6,7 +6,7 @@ interface ButtonProps {
   onClick?: () => void
   href?: string
   className?: string
-  varient?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'danger' | 'glass'
+  varient?: 'primary' | '3d' | 'outline' | 'glass'
   size?: 'sm' | 'md' | 'lg'
   icon?: React.ReactNode
   loading?: boolean
@@ -16,16 +16,16 @@ interface ButtonProps {
 }
 
 export function Button({ onClick, href, className, children, varient = 'primary', size = 'md', icon, loading = false, ariaLabel, type = 'submit' }: ButtonProps) {
-  // glass is our own skin (globals.css) layered on HeroUI's ghost
-  const variant = varient === 'glass' ? 'ghost' : varient
+  // glass and 3d are custom skins layered on HeroUI
+  const variant = varient === 'glass' ? 'ghost' : varient === '3d' ? 'primary' : varient
   const isIconOnly = !!icon && !children
-  const classes = `${varient === 'glass' ? 'button--glass' : ''} ${className ?? ''}`
+  const classes = `${varient === 'glass' ? 'button--glass' : ''} ${varient === '3d' ? 'button--3d' : ''} ${className ?? ''}`
 
   const content = loading ? (
     <Spinner size="sm" color="current" />
   ) : (
     <>
-      {icon && <span className="material-symbols-outlined">{icon}</span>}
+      {icon && <span className="material-symbols-outlined ">{icon}</span>}
       {children}
     </>)
 

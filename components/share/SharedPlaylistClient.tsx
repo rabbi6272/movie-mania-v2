@@ -37,7 +37,7 @@ export function SharedPlaylistClient() {
         <p className="text-sm text-gray-400 mt-1">
           This share link is invalid or has been revoked.
         </p>
-        <Link href="/" className="text-sm font-semibold text-blue-600 hover:underline mt-4">
+        <Link href="/" className="text-sm font-semibold text-gray-800 hover:text-black hover:underline mt-4">
           Go to MovieMania
         </Link>
       </div>
