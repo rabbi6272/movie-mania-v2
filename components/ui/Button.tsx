@@ -6,7 +6,7 @@ interface ButtonProps {
   onClick?: () => void
   href?: string
   className?: string
-  varient?: 'primary' | 'outline'
+  varient?: 'primary' | 'outline' | 'secondary' | 'ghost' | 'danger' | 'glass'
   size?: 'sm' | 'md' | 'lg'
   icon?: React.ReactNode
   loading?: boolean
@@ -16,20 +16,22 @@ interface ButtonProps {
 }
 
 export function Button({ onClick, href, className, children, varient = 'primary', size = 'md', icon, loading = false, ariaLabel, type = 'submit' }: ButtonProps) {
-  const variant = varient === 'primary' ? 'primary' : 'outline'
-  const classes = `rounded-full shadow text-nowrap font-semibold ${className ?? ''}`
+  // glass is our own skin (globals.css) layered on HeroUI's ghost
+  const variant = varient === 'glass' ? 'ghost' : varient
+  const isIconOnly = !!icon && !children
+  const classes = `${varient === 'glass' ? 'button--glass' : ''} ${className ?? ''}`
 
   const content = loading ? (
     <Spinner size="sm" color="current" />
   ) : (
-    <span className="flex items-center gap-2">
-      {icon && <span className="material-symbols-outlined" style={{ fontSize: 20 }}>{icon}</span>}
+    <>
+      {icon && <span className="material-symbols-outlined">{icon}</span>}
       {children}
-    </span>)
+    </>)
 
   if (href) {
     return (
-      <Link href={href} className={buttonVariants({ variant, size, className: classes })} aria-label={ariaLabel}>
+      <Link href={href} className={buttonVariants({ variant, size, isIconOnly, className: classes })} aria-label={ariaLabel}>
         {content}
       </Link>
     )
@@ -42,6 +44,7 @@ export function Button({ onClick, href, className, children, varient = 'primary'
       isPending={loading}
       variant={variant}
       size={size}
+      isIconOnly={isIconOnly}
       className={classes}
       aria-label={ariaLabel}
     >

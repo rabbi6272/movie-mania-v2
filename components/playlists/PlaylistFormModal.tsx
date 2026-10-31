@@ -90,10 +90,10 @@ export function PlaylistFormModal({
         </div>
 
         <div className="flex justify-end gap-3 pt-2">
-          <Button type="button" variant="ghost" onPress={onClose} className="rounded-full">
+          <Button type="button" variant="ghost" onPress={onClose}>
             Cancel
           </Button>
-          <Button type="submit" isPending={isSubmitting} className="rounded-full">
+          <Button type="submit" isPending={isSubmitting}>
             {isSubmitting && <Spinner size="sm" color="current" />}
             {submitLabel}
           </Button>

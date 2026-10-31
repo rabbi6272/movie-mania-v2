@@ -5,7 +5,7 @@ export default function TrailerModal({ videoKey, onClose }) {
   if (!videoKey) return null;
 
   return (
-    <Modal.Backdrop isOpen onOpenChange={(open) => !open && onClose()} className="bg-black/80">
+    <Modal.Backdrop variant="blur" isOpen onOpenChange={(open) => !open && onClose()} className="bg-black/80">
       <Modal.Container size="cover">
         <Modal.Dialog aria-label="Movie Trailer" className="bg-transparent shadow-none p-0 max-w-4xl">
           <Modal.CloseTrigger className="text-white" />

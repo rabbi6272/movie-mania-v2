@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Avatar, Dropdown } from "@heroui/react";
+import { Avatar, Button, Dropdown } from "@heroui/react";
 
 import { useAuth } from "@/hooks/useAuth";
 
@@ -76,19 +76,20 @@ export function UserAvatar({
   const avatarAlt = displayName ?? email ?? "User avatar";
   const itemClass = "px-4 py-2 text-md font-semibold text-gray-700 flex items-center gap-2 cursor-pointer";
   return (
-    <Dropdown>
-      <Dropdown.Trigger aria-label="Account menu" className="rounded-full cursor-pointer">
-        {isAuthenticated ? (
+    // keyed: logging out swaps the item id while the menu is still mounted, and React Aria throws "Cannot change the id of an item"
+    <Dropdown key={isAuthenticated ? "user" : "guest"}>
+      {isAuthenticated ? (
+        <Dropdown.Trigger aria-label="Account menu" className="grid place-items-center rounded-full cursor-pointer">
           <Avatar className={`${sizeClass} ${className}`}>
             {user?.photoURL && <Avatar.Image src={user.photoURL} alt={avatarAlt} className="object-cover" />}
             <Avatar.Fallback className={`${bgColor} text-white font-semibold`}>{initials}</Avatar.Fallback>
           </Avatar>
-        ) : (
-          <span className="material-symbols-outlined grid place-items-center h-10 w-10 text-gray-900" style={{ fontSize: 20 }}>
-            person
-          </span>
-        )}
-      </Dropdown.Trigger>
+        </Dropdown.Trigger>
+      ) : (
+        <Button variant="ghost" isIconOnly aria-label="Account menu" className="text-gray-900">
+          <span className="material-symbols-outlined">person</span>
+        </Button>
+      )}
       <Dropdown.Popover className="min-w-30 lg:min-w-40">
         <Dropdown.Menu onAction={(key) => (key === "logout" ? logout() : router.push("/login"))}>
           {isAuthenticated ? (

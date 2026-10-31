@@ -12,7 +12,7 @@ export function ModalShell({
 }) {
   // Parents mount this only while open, so it is always open; HeroUI handles Escape, backdrop click, focus and scroll lock.
   return (
-    <Modal.Backdrop isOpen onOpenChange={(open) => !open && onClose()}>
+    <Modal.Backdrop variant="blur" isOpen onOpenChange={(open) => !open && onClose()}>
       <Modal.Container size="sm">
         <Modal.Dialog aria-label={title}>
           <Modal.CloseTrigger />

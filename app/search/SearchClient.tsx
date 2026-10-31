@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { SmallMovieCard } from "@/components/SmallMovieCard";
-import { Loader } from "@/components/ui/loader";
+import { CardGridSkeleton } from "@/components/ui/CardGridSkeleton";
 import Pagination from "@/components/Pagination";
 import { useSearchMovies } from "@/hooks/useSearchMovies";
 import { Button } from "@/components/ui/Button";
@@ -83,7 +83,6 @@ export function SearchClient() {
                 onClick={() => setMediaFilter(filter.value)}
                 varient={mediaFilter === filter.value ? "primary" : "outline"}
                 size="sm"
-                className="md:text-sm px-4"
               >
                 {filter.label}
               </Button>
@@ -104,9 +103,7 @@ export function SearchClient() {
 
       {/* First-ever load */}
       {searchLoading && (
-        <div className="w-full h-[calc(100vh-70px-76px)] flex items-center justify-center">
-          <Loader />
-        </div>
+        <CardGridSkeleton className="w-full grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-10 gap-2 px-4 my-2" />
       )}
 
       {/* Error */}

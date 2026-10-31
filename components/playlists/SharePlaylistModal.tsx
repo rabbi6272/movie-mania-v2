@@ -121,15 +121,15 @@ export function SharePlaylistModal({
               onFocus={(e) => e.target.select()}
               className="flex-1 truncate"
             />
-            <Button onPress={handleCopy} className="rounded-full">
-              <span className="material-symbols-outlined text-base">
+            <Button onPress={handleCopy}>
+              <span className="material-symbols-outlined">
                 {isCopied ? "check" : "content_copy"}
               </span>
               {isCopied ? "Copied" : "Copy"}
             </Button>
           </div>
-          <Button onPress={handleRevoke} variant="danger-soft" fullWidth className="rounded-full">
-            <span className="material-symbols-outlined text-base">link_off</span>
+          <Button onPress={handleRevoke} variant="danger-soft" fullWidth>
+            <span className="material-symbols-outlined">link_off</span>
             Revoke link
           </Button>
         </div>
@@ -141,11 +141,11 @@ export function SharePlaylistModal({
           <p className="text-sm text-gray-600">
             Generate a link to share this playlist with anyone.
           </p>
-          <Button onPress={handleGenerate} isPending={isGenerating} fullWidth className="rounded-full">
+          <Button onPress={handleGenerate} isPending={isGenerating} fullWidth>
             {isGenerating ? (
               <Spinner size="sm" color="current" />
             ) : (
-              <span className="material-symbols-outlined text-base">link</span>
+              <span className="material-symbols-outlined">link</span>
             )}
             Generate share link
           </Button>

@@ -149,9 +149,9 @@ export function AddToPlaylistModal({
         variant="secondary"
         fullWidth
         onPress={() => setIsCreateOpen(true)}
-        className="mt-4 rounded-full"
+        className="mt-4"
       >
-        <span className="material-symbols-outlined text-base">add</span>
+        <span className="material-symbols-outlined">add</span>
         New playlist
       </Button>
 

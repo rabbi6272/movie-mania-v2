@@ -13,7 +13,7 @@ import { getPosterURL } from "@/api/tmdb";
 import type { Movie } from "@/types/movie";
 
 import { SmallMovieCard } from "@/components/SmallMovieCard";
-import { Loader } from "@/components/ui/loader";
+import { CardGridSkeleton } from "@/components/ui/CardGridSkeleton";
 import { ModalShell } from "@/components/playlists/ModalShell";
 import { PlaylistFormModal } from "@/components/playlists/PlaylistFormModal";
 import { SharePlaylistModal } from "@/components/playlists/SharePlaylistModal";
@@ -76,8 +76,8 @@ export function PlaylistDetailClient() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
-        <Loader />
+      <div className="max-w-full mx-auto px-2 md:px-8 pb-12">
+        <CardGridSkeleton className="w-full grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-0.5 md:gap-2 mt-6" />
       </div>
     );
   }
@@ -122,11 +122,11 @@ export function PlaylistDetailClient() {
           <Button
             isIconOnly
             variant="ghost"
-            className="h-10 w-10 rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60"
+            className="button--glass"
             onPress={() => router.back()}
             aria-label="Go back"
           >
-            <span className="material-symbols-outlined text-white text-xl">arrow_back</span>
+            <span className="material-symbols-outlined">arrow_back</span>
           </Button>
 
           <div className="relative rounded-xl shadow-xl ring-1 ring-black/10 bg-white mt-4 overflow-hidden">
@@ -155,16 +155,16 @@ export function PlaylistDetailClient() {
 
               {isOwner && (
                 <div className="flex items-center gap-2 flex-wrap shrink-0">
-                  <Button onPress={() => setIsShareOpen(true)} className="rounded-full">
-                    <span className="material-symbols-outlined text-base">share</span>
+                  <Button onPress={() => setIsShareOpen(true)}>
+                    <span className="material-symbols-outlined">share</span>
                     Share
                   </Button>
-                  <Button variant="secondary" onPress={() => setIsEditOpen(true)} className="rounded-full">
-                    <span className="material-symbols-outlined text-base">edit</span>
+                  <Button variant="secondary" onPress={() => setIsEditOpen(true)}>
+                    <span className="material-symbols-outlined">edit</span>
                     Edit
                   </Button>
-                  <Button variant="danger-soft" onPress={() => setIsDeleteOpen(true)} className="rounded-full">
-                    <span className="material-symbols-outlined text-base">delete</span>
+                  <Button variant="danger-soft" onPress={() => setIsDeleteOpen(true)}>
+                    <span className="material-symbols-outlined">delete</span>
                     Delete
                   </Button>
                 </div>
@@ -240,10 +240,10 @@ export function PlaylistDetailClient() {
             Are you sure you want to delete <span className="font-semibold text-gray-900">{playlist.name}</span>? This will remove the playlist and all of its titles. This cannot be undone.
           </p>
           <div className="flex justify-end gap-3 mt-5">
-            <Button variant="ghost" onPress={() => setIsDeleteOpen(false)} className="rounded-full">
+            <Button variant="ghost" onPress={() => setIsDeleteOpen(false)}>
               Cancel
             </Button>
-            <Button variant="danger" onPress={handleDelete} isPending={isDeleting} className="rounded-full">
+            <Button variant="danger" onPress={handleDelete} isPending={isDeleting}>
               {isDeleting && <Spinner size="sm" color="current" />}
               Delete
             </Button>
